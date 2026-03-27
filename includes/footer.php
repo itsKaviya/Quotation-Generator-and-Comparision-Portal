@@ -1,40 +1,51 @@
     </div> <!-- End container -->
-    <footer class="footer mt-auto py-3 bg-light border-top mt-5">
-        <div class="container text-center">
-            <span class="text-muted">© 2026 Quotation Generator & Comparison Portal. Built with ❤️</span>
+    <footer class="footer mt-auto py-5 border-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <span class="navbar-brand mb-2 d-block">Quotify</span>
+                    <p class="text-muted small mb-0">© 2026 Quotify Portal. All rights reserved. Designed for excellence.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <a href="#" class="text-muted text-decoration-none"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JS and Icons -->
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <script>
         const themeToggle = document.getElementById('themeToggle');
-        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+        const icon = themeToggle.querySelector('i');
 
         // Check for saved theme
         const savedTheme = localStorage.getItem('theme') || 'light';
-        htmlElement.setAttribute('data-bs-theme', savedTheme);
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        updateIcon(savedTheme);
 
         themeToggle.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             
-            htmlElement.setAttribute('data-bs-theme', newTheme);
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
             localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
         });
 
-        // Simple Navbar shadow on scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('mainNav');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-sm');
-                nav.style.backgroundColor = 'rgba(var(--bs-bg-opacity, 1), 0.9)';
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
             } else {
-                nav.classList.remove('shadow-sm');
+                icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
             }
-        });
+        }
     </script>
 </body>
 </html>
