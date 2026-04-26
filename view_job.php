@@ -40,25 +40,31 @@ if(isset($_POST['submit_quote']) && $user_role == 'vendor'){
     $message = mysqli_real_escape_string($conn, $_POST['message']);
     
     // Get vendor_id
-    $vendor_data = $conn->query("SELECT id FROM vendors WHERE user_id = '$user_id'")->fetch_assoc();
-    $vendor_id = $vendor_data['id'];
+    $vendor_res = $conn->query("SELECT id FROM vendors WHERE user_id = '$user_id'");
+    if($vendor_res && $vendor_res->num_rows > 0){
+        $vendor_data = $vendor_res->fetch_assoc();
+        $vendor_id = $vendor_data['id'];
 
-    // Check if already quoted
-    $check_quote = $conn->query("SELECT id FROM quotations WHERE job_id = '$job_id' AND vendor_id = '$vendor_id'");
-    
-    if($check_quote->num_rows > 0){
-        $sql = "UPDATE quotations SET price = '$price', delivery_days = '$delivery_days', message = '$message' 
-                WHERE job_id = '$job_id' AND vendor_id = '$vendor_id'";
-    } else {
-        $sql = "INSERT INTO quotations (job_id, vendor_id, price, delivery_days, message) 
-                VALUES ('$job_id', '$vendor_id', '$price', '$delivery_days', '$message')";
-    }
+        // Check if already quoted
+        $check_quote = $conn->query("SELECT id FROM quotations WHERE job_id = '$job_id' AND vendor_id = '$vendor_id'");
+        
+        if($check_quote->num_rows > 0){
+            $sql = "UPDATE quotations SET price = '$price', delivery_days = '$delivery_days', message = '$message' 
+                    WHERE job_id = '$job_id' AND vendor_id = '$vendor_id'";
+        } else {
+            $sql = "INSERT INTO quotations (job_id, vendor_id, price, delivery_days, message) 
+                    VALUES ('$job_id', '$vendor_id', '$price', '$delivery_days', '$message')";
+        }
 
-    if($conn->query($sql)){
-        $msg = "Quote submitted successfully!";
-        $type = "success";
+        if($conn->query($sql)){
+            $msg = "Quote submitted successfully!";
+            $type = "success";
+        } else {
+            $msg = "Error submitting quote: " . $conn->error;
+            $type = "danger";
+        }
     } else {
-        $msg = "Error submitting quote: " . $conn->error;
+        $msg = "Error: Vendor profile not found. Please logout and login again.";
         $type = "danger";
     }
 }
