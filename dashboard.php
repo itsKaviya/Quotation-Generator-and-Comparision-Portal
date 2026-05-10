@@ -141,7 +141,7 @@ include("includes/header.php");
                                              WHERE jobs.status = 'open' 
                                              ORDER BY jobs.created_at DESC LIMIT 10";
                             $market_res = $conn->query($market_query);
-                            if($market_res && $market_res->num_rows > 0):
+                            if($market_res->num_rows > 0):
                                 while($job = $market_res->fetch_assoc()):
                             ?>
                                 <tr>
@@ -167,16 +167,10 @@ include("includes/header.php");
             <div class="glass-card p-4 mb-4">
                 <h5 class="fw-bold mb-3">My Stats</h5>
                 <?php
-                $v_id = 0;
-                $v_rating = 0;
-                $vendor_id_res = $conn->query("SELECT id, rating FROM vendors WHERE user_id = '$user_id'");
-                if($vendor_id_res && $vendor_id_res->num_rows > 0){
-                    $v_data = $vendor_id_res->fetch_assoc();
-                    $v_id = $v_data['id'];
-                    $v_rating = $v_data['rating'];
-                }
-                
-                $my_quotes_count = ($v_id > 0) ? $conn->query("SELECT COUNT(*) as total FROM quotations WHERE vendor_id = '$v_id'")->fetch_assoc() : ['total' => 0];
+                $vendor_id_res = $conn->query("SELECT id, rating FROM vendors WHERE user_id = '$user_id'")->fetch_assoc();
+                $v_id = $vendor_id_res['id'];
+                $v_rating = $vendor_id_res['rating'];
+                $my_quotes_count = $conn->query("SELECT COUNT(*) as total FROM quotations WHERE vendor_id = '$v_id'")->fetch_assoc();
                 ?>
                 <div class="mb-3">
                     <label class="text-muted small">Active Quotes</label>
